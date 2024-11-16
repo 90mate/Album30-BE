@@ -1,7 +1,7 @@
 package com.mate.album30.domain.albumTalk.entity;
 
-import com.mate.album30.domain.global.BaseEntity;
-import com.mate.album30.domain.global.Role;
+import com.mate.album30.domain.common.BaseEntity;
+import com.mate.album30.domain.common.Role;
 import com.mate.album30.domain.member.entity.Member;
 import lombok.*;
 
@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Setter@Getter@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -36,10 +36,14 @@ public class ChatRoom extends BaseEntity {
     private Member seller;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
-    private List<Message> messages = new ArrayList<>(); // 메시지 리스트
+    private List<Chat> chats = new ArrayList<>(); // 메시지 리스트
 
-    public void addMessage(Message message) {
-        this.messages.add(message);
-        message.setChatRoom(this);
+    public void addMessage(Chat chat) {
+        this.chats.add(chat);
+        chat.setChatRoom(this);
     }
+    public Long getChatRoomId(ChatRoom chatRoom) {
+       return chatRoomId;
+    }
+
 }

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Chat</title>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/dist/stomp.min.js"></script>
+  <style>
+    .message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      max-width: 80%;
+    }
+    .my-message {
+      background-color: lightblue;
+      align-self: flex-end;
+      text-align: right;
+    }
+    .other-message {
+      background-color: lightgray;
+      align-self: flex-start;
+      text-align: left;
+    }
+    #messages {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+<h1>WebSocket Chat</h1>
+
+<div>
+  <input type="text" id="messageInput" placeholder="Type a message" />
+  <button onclick="sendMessage()">Send</button>
+</div>
+
+<div id="messages"></div>
+
+<script>
+  var roomId = "room1";  // 예시: room1이라는 채팅방
+  var userName = "User1";  // 예시: 사용자 이름
+
+  var socket = new SockJS('/ws-stomp');
+  var stompClient = Stomp.over(socket);
+
+  // 메시지 수신 후 처리
+  function onMessageReceived(message) {
+    var messagesList = document.getElementById("messages");
+    var messageData = JSON.parse(message.body);  // 받은 메시지 JSON 파싱
+
+    // 메시지 요소 생성
+    var messageElement = document.createElement("div");
+    messageElement.classList.add("message");
+
+    // 메시지를 보낸 사람에 따라 다르게 스타일 적용
+    if (messageData.username === userName) {
+      messageElement.classList.add("my-message");  // 내가 보낸 메시지
+    } else {
+      messageElement.classList.add("other-message");  // 상대방이 보낸 메시지
+    }
+
+    messageElement.innerText = messageData.username + ": " + messageData.message;
+    messagesList.appendChild(messageElement);
+  }
+
+  stompClient.connect({}, function (frame) {
+    console.log('Connected: ' + frame);
+    stompClient.subscribe('/room/' + roomId, onMessageReceived);  // roomId를 기반으로 구독
+  });
+
+  function sendMessage() {
+    var messageInput = document.getElementById("messageInput");
+    var message = messageInput.value;
+
+    if (message) {
+      // 메시지 객체에 사용자 이름과 메시지 내용 포함
+      var chatMessage = {
+        username: userName,
+        message: message
+      };
+
+      // 메시지 전송 (JSON으로 변환하여 전송)
+      stompClient.send("/send/" + roomId, {}, JSON.stringify(chatMessage));
+      messageInput.value = '';  // 메시지 전송 후 입력란 비우기
+    }
+  }
+</script>
+</body>
+</html>

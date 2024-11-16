@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/dist/stomp.min.js"></script>
+</head>
+<body>
+<h1>WebSocket Chat</h1>
+
+<div>
+    <input type="text" id="messageInput" placeholder="Type a message" />
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+<div id="messages"></div>
+<script>
+    var roomId = "1";
+    var username = "판매자1"
+    var stompClient = null;
+    var isConnected = false;  // 연결 상태를 확인할 변수
+
+    // WebSocket 연결 및 메시지 수신 설정
+    function connect() {
+        // URL 수정: /ws-stomp 만 사용
+        var socket = new SockJS("/ws-stomp");
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            isConnected = true;
+            console.log('Connected: ' + frame);
+            // loadChat(chatList)  //저장된 채팅 불러오기
+
+            // 구독 설정: /room/{roomId}로 메시지 수신
+            stompClient.subscribe('/room/' + roomId, function (chatDto) {
+                onMessageReceived(JSON.parse(chatDto.body));  // chatMessage -> chatDto로 수정
+            });
+
+        });
+    }
+
+    // 메시지를 받은 후, 화면에 표시
+    function onMessageReceived(chatDto) {
+        var messagesDiv = document.getElementById("messages");
+        var messageElement = document.createElement("p");
+
+        // 보낸 사람에 따라 메시지 스타일을 다르게 설정
+        if (chatDto.sender === username) {
+            messageElement.style.textAlign = "right";  // 내 메시지는 오른쪽 정렬
+            messageElement.style.color = "blue";  // 내 메시지 색상
+        } else {
+            messageElement.style.textAlign = "left";  // 상대방 메시지는 왼쪽 정렬
+            messageElement.style.color = "green";  // 상대방 메시지 색상
+        }
+
+        messageElement.innerText = chatDto.sender + ": " + chatDto.message;
+        messagesDiv.appendChild(messageElement);
+    }
+
+    // 메시지 전송
+    function sendMessage() {
+        // if (!isConnected) {  // 연결되지 않으면 메시지를 전송하지 않음
+        //     alert('서버에 연결되지 않았습니다. 다시 시도해주세요.');
+        //     return;
+        // }
+
+        var messageInput = document.getElementById("messageInput");
+        var message = messageInput.value;
+        if (message) {
+            var chatDto = {
+                sender: username,  // 실제 사용자 이름을 변수로 설정
+                message: message
+            };
+
+            // STOMP를 통해 서버에 메시지 전송
+            stompClient.send("/send/" + roomId, {}, JSON.stringify(chatDto));
+            messageInput.value = '';  // 메시지 입력창 초기화
+        }
+    }
+
+    // 연결 시도
+    connect();
+</script>
+
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 package com.mate.album30.domain.member.entity;
 
 import com.mate.album30.domain.albumTalk.entity.ChatRoom;
-import com.mate.album30.domain.global.BaseEntity;
+import com.mate.album30.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
