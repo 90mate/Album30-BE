@@ -1,23 +1,20 @@
-name: Bug report
-about: 발생한 버그에 대해 설명해주세요
-title: "[Bug]"
-labels: ":lady_beetle: bug"
-assignees: ''
-
 name: "🐞 Bug Report"
-description: 버그 발생 상황과 문제를 작성해주세요.
-title: "[ BUG ] "
+description: "버그 발생 상황과 문제를 작성해주세요."
+title: "[Bug] "
+labels: ":lady_beetle: bug"
+assignees: ""
 body:
   - type: markdown
     attributes:
       value: |
-        작성 예시 : "[ BUG 1 ] 특정 기능에서 오류 발생"
+        **작성 예시:** 
+        - "[ BUG 1 ] 특정 기능에서 오류 발생"
   - type: textarea
     id: bug-description
     attributes:
       label: 🛠 버그 설명
       description: 발견한 버그에 대한 자세한 설명을 작성해주세요.
-      placeholder: 버그를 설명해주세요.
+      placeholder: "버그를 설명해주세요."
     validations:
       required: true
   - type: textarea
@@ -25,7 +22,9 @@ body:
     attributes:
       label: 🔍 버그 발생 경위
       description: 버그를 재현하기 위한 단계를 작성해주세요.
-      placeholder: "1. ... \n2. ..."
+      placeholder: |
+        1. ...
+        2. ...
     validations:
       required: true
   - type: textarea
@@ -33,7 +32,7 @@ body:
     attributes:
       label: 📝 예상 결과
       description: 기대했던 동작을 작성해주세요.
-      placeholder: 설명을 작성해주세요.
+      placeholder: "설명을 작성해주세요."
     validations:
       required: true
   - type: textarea
@@ -41,6 +40,6 @@ body:
     attributes:
       label: 🔍 실제 결과
       description: 실제로 발생한 동작을 작성해주세요.
-      placeholder: 설명을 작성해주세요.
+      placeholder: "설명을 작성해주세요."
     validations:
       required: true
