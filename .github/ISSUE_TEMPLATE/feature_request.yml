@@ -1,0 +1,34 @@
+name: "✨ Feature Request"
+description: "구현할 기능에 대해 설명해주세요."
+title: "[Feature]"
+labels: ":sparkles: feature"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **작성 예시:**  
+        "[Feature 1] 새로운 기능에 대한 간략한 설명"
+  - type: textarea
+    id: feat-description
+    attributes:
+      label: 🛠 구현할 기능
+      description: 요청하는 기능에 대한 자세한 설명을 작성해주세요.
+      placeholder: "기능에 대한 설명을 작성해주세요."
+    validations:
+      required: true
+  - type: textarea
+    id: feat-list
+    attributes:
+      label: 📝 예상 결과
+      description: 요청된 기능이 구현되었을 때의 기대 효과를 작성해주세요.
+      placeholder: "예상 결과를 작성해주세요."
+    validations:
+      required: false
+  - type: textarea
+    id: references
+    attributes:
+      label: 🔍 참고 자료
+      description: 기능을 구현할 때 참고한 자료(문서, 링크 등)가 있다면 작성해주세요.
+      placeholder: "참고 자료를 작성해주세요."
+    validations:
+      required: false

@@ -11,3 +11,4 @@ public interface AlbumTalkRepository extends JpaRepository<Chat, Long> {
     // MongoDB에서 AlbumTalk 엔티티와 관련된 작업을 자동으로 처리
 }
 
+

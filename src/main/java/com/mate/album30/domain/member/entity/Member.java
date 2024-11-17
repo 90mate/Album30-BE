@@ -1,8 +1,10 @@
-// Member.java
 package com.mate.album30.domain.member.entity;
 
+import com.mate.album30.domain.album.entity.Bookmark;
 import com.mate.album30.domain.albumTalk.entity.ChatRoom;
 import com.mate.album30.domain.common.BaseEntity;
+import com.mate.album30.domain.member.entity.enums.Provider;
+import com.mate.album30.domain.albumTalk.entity.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,10 +21,22 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId; // MySQL에서 기본 키
 
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+
+    @Column(unique = true)
     private String nickName;
+
+    @Column
     private String name;
-    private String birthDay;
+
+    @Column
+    private String birthDate;
+
+    @Column
     private String phoneNumber;
+
+    @Column
     private Boolean isActivated;
 
     // 양방향 연관 관계 설정 (구매한 거래)
@@ -42,4 +56,8 @@ public class Member extends BaseEntity {
         this.soldChatRoomList.add(chatRoom);
         chatRoom.setSeller(this);
     }
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bookmark> bookmarks;
 }
+
