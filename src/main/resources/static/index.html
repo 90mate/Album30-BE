@@ -1,88 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebSocket Chat</title>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/dist/stomp.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 </head>
 <body>
-<h1>WebSocket Chat</h1>
+<noscript>
+    <h2 style="color: #ff0000">Seems your browser doesn't support Javascript! WebSocket relies on Javascript being enabled. Please enable Javascript and reload this page!</h2>
+</noscript>
 
-<div>
-    <input type="text" id="messageInput" placeholder="Type a message" />
-    <button onclick="sendMessage()">Send</button>
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect">WebSocket connection:</label>
+                    <button id="connect" class="btn btn-default" type="button">Connect</button>
+                    <button id="disconnect" class="btn btn-default" type="button" disabled="disabled">Disconnect</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="name">What is your name?</label>
+                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
+                </div>
+                <button id="send" class="btn btn-default" type="button">Send</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Messages</th>
+                </tr>
+                </thead>
+                <tbody id="greetings">
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<div id="messages"></div>
 <script>
-    var roomId = "1";
-    var username = "판매자1"
-    var stompClient = null;
-    var isConnected = false;  // 연결 상태를 확인할 변수
+    const stompClient = new StompJs.Client({
+        brokerURL: 'ws://localhost:8080/ws-stomp', // 서버의 WebSocket 엔드포인트
+    });
 
-    // WebSocket 연결 및 메시지 수신 설정
-    function connect() {
-        // URL 수정: /ws-stomp 만 사용
-        var socket = new SockJS("/ws-stomp");
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-            isConnected = true;
-            console.log('Connected: ' + frame);
-            // loadChat(chatList)  //저장된 채팅 불러오기
+    stompClient.onConnect = (frame) => {
+        setConnected(true);
+        console.log('Connected: ' + frame);
 
-            // 구독 설정: /room/{roomId}로 메시지 수신
-            stompClient.subscribe('/room/' + roomId, function (chatDto) {
-                onMessageReceived(JSON.parse(chatDto.body));  // chatMessage -> chatDto로 수정
-            });
-
+        // 서버로부터 /room/{roomId} 경로로 구독
+        const roomId = 1;  // 예시로 1번 방 사용
+        stompClient.subscribe(`/room/${roomId}`, (message) => {
+            showGreeting(JSON.parse(message.body).content);
         });
-    }
+    };
 
-    // 메시지를 받은 후, 화면에 표시
-    function onMessageReceived(chatDto) {
-        var messagesDiv = document.getElementById("messages");
-        var messageElement = document.createElement("p");
+    stompClient.onWebSocketError = (error) => {
+        console.error('Error with websocket', error);
+    };
 
-        // 보낸 사람에 따라 메시지 스타일을 다르게 설정
-        if (chatDto.sender === username) {
-            messageElement.style.textAlign = "right";  // 내 메시지는 오른쪽 정렬
-            messageElement.style.color = "blue";  // 내 메시지 색상
+    stompClient.onStompError = (frame) => {
+        console.error('Broker reported error: ' + frame.headers['message']);
+        console.error('Additional details: ' + frame.body);
+    };
+
+    function setConnected(connected) {
+        $("#connect").prop("disabled", connected);
+        $("#disconnect").prop("disabled", !connected);
+        if (connected) {
+            $("#conversation").show();
         } else {
-            messageElement.style.textAlign = "left";  // 상대방 메시지는 왼쪽 정렬
-            messageElement.style.color = "green";  // 상대방 메시지 색상
+            $("#conversation").hide();
         }
-
-        messageElement.innerText = chatDto.sender + ": " + chatDto.message;
-        messagesDiv.appendChild(messageElement);
+        $("#greetings").html("");
     }
 
-    // 메시지 전송
-    function sendMessage() {
-        // if (!isConnected) {  // 연결되지 않으면 메시지를 전송하지 않음
-        //     alert('서버에 연결되지 않았습니다. 다시 시도해주세요.');
-        //     return;
-        // }
+    function connect() {
+        stompClient.activate();
+    }
 
-        var messageInput = document.getElementById("messageInput");
-        var message = messageInput.value;
-        if (message) {
-            var chatDto = {
-                sender: username,  // 실제 사용자 이름을 변수로 설정
-                message: message
+    function disconnect() {
+        stompClient.deactivate();
+        setConnected(false);
+        console.log("Disconnected");
+    }
+
+    function sendMessage() {
+        const roomId = 1;  // 예시로 1번 방 사용
+        const messageContent = $("#name").val();
+
+        // 하드코딩된 username
+        const sender = "구매자1";  // 하드코딩된 username
+
+        if (messageContent && stompClient.connected) {
+            const message = {
+                sender: sender, // sender를 하드코딩된 username으로 설정
+                message: messageContent,
+                chatRoomId: roomId
             };
 
-            // STOMP를 통해 서버에 메시지 전송
-            stompClient.send("/send/" + roomId, {}, JSON.stringify(chatDto));
-            messageInput.value = '';  // 메시지 입력창 초기화
+            // 클라이언트에서 메시지 전송
+            stompClient.publish({
+                destination: '/app/send/' + roomId,  // 서버의 @MessageMapping 경로와 일치하도록 수정
+                body: JSON.stringify(message)
+            });
+        } else {
+            alert("Please provide your name and ensure you're connected to the server.");
         }
     }
 
-    // 연결 시도
-    connect();
+
+    function showGreeting(message) {
+        $("#greetings").append("<tr><td>" + message + "</td></tr>");
+    }
+
+    $(function () {
+        $("form").on('submit', (e) => e.preventDefault());
+        $("#connect").click(() => connect());
+        $("#disconnect").click(() => disconnect());
+        $("#send").click(() => sendMessage());
+    });
 </script>
-
-
 </body>
 </html>

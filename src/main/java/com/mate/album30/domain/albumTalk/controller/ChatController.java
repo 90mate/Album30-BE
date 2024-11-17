@@ -15,11 +15,10 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    @MessageMapping("/{roomId}") //여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes 에서 적용한건 앞에 생략
-    @SendTo("/room/{roomId}")   //구독하고 있는 장소로 메시지 전송 (목적지)  -> WebSocketConfig Broker 에서 적용한건 앞에 붙어줘야됨
+    @MessageMapping("/send/{roomId}")  // 클라이언트에서 보낸 메시지를 처리
+    @SendTo("/room/{roomId}")   // 응답을 해당 방에 구독한 모든 클라이언트에게 전송
     public ChatDto chat(@DestinationVariable Long roomId, ChatDto receivedChatDto) {
-
-        //채팅 저장
+        // 채팅 저장
         Chat chat = chatService.createChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage());
         System.out.println("Chat saved: " + chat);  // 로그 추가
         return ChatDto.builder()
