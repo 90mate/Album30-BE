@@ -59,7 +59,9 @@
         // 서버로부터 /room/{roomId} 경로로 구독
         const roomId = 1;  // 예시로 1번 방 사용
         stompClient.subscribe(`/room/${roomId}`, (message) => {
-            showGreeting(JSON.parse(message.body).content);
+            // showGreeting(JSON.parse(message.body).content);
+            // json에 있는 message변수 출력
+            showGreeting(JSON.parse(message.body).message);
         });
     };
 
@@ -121,10 +123,6 @@
         }
     }
 
-
-    // function showGreeting(message) {
-    //     $("#greetings").append("<tr><td>" + message + "</td></tr>");
-    // }
     function showGreeting(message) {
         if (message && message !== 'undefined') {
             console.log("Received message:", message);  // 메시지 확인을 위한 로그 추가

@@ -14,40 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-//@Service
-//@Data
-//
-//@RequiredArgsConstructor
-//public class ChatService {
-//
-//    private final AlbumTalkRepository chatRepository;  // Chat 데이터를 처리할 Repository
-//    private final ChatRoomRepository chatRoomRepository;  // Chat 데이터를 처리할 Repository
-//
-//    // 채팅 메시지 저장하는 메서드
-//    public Chat createChat(Long roomId, String sender, String message) {
-//        // ChatRoom 엔티티를 roomId로 조회 (Optional 처리)
-//        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid chat room ID: " + roomId));
-//
-//        // Chat 객체 생성
-//        // Chat 객체 생성
-//        Chat chat = Chat.builder()
-//                .chatRoom(chatRoom)
-//                .sender(sender)
-//                .message(message)
-//                .sendAt(LocalDateTime.now())
-//                .isChecked(false)
-//                .messageTypeId(1L)
-//                .build();
-////        log.info("Chat created: {}", chat);  // 로그 추가
-//
-//        // Chat 객체를 데이터베이스에 저장
-//        return chatRepository.save(chat);
-//    }
-//
-//
-//}
-
 @Service
 @RequiredArgsConstructor
 public class ChatService {
