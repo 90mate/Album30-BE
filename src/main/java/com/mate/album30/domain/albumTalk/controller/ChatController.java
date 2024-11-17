@@ -4,6 +4,8 @@ import com.mate.album30.domain.albumTalk.dto.ChatDto;
 import com.mate.album30.domain.albumTalk.entity.Chat;
 import com.mate.album30.domain.albumTalk.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -13,14 +15,19 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class ChatController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ChatController.class); // 로그 객체 생성
     private final ChatService chatService;
 
-    @MessageMapping("/send/{roomId}")  // 클라이언트에서 보낸 메시지를 처리
-    @SendTo("/room/{roomId}")   // 응답을 해당 방에 구독한 모든 클라이언트에게 전송
+    @MessageMapping("/{roomId}") // 여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes에서 적용한 건 앞에 생략
+    @SendTo("/room/{roomId}")   // 구독하고 있는 장소로 메시지 전송 (목적지) -> WebSocketConfig Broker에서 적용한 건 앞에 붙어줘야됨
     public ChatDto chat(@DestinationVariable Long roomId, ChatDto receivedChatDto) {
+        logger.info("Received message from sender: {} for roomId: {}", receivedChatDto.getSender(), roomId);
+
         // 채팅 저장
         Chat chat = chatService.createChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage());
-        System.out.println("Chat saved: " + chat);  // 로그 추가
+
+        logger.info("Chat saved: {}", chat);  // 저장된 채팅 객체 로그 출력
+
         return ChatDto.builder()
                 .chatRoomId(roomId)
                 .sender(chat.getSender())

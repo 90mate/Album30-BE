@@ -27,11 +27,11 @@ public class ChatRoom extends BaseEntity {
     private Role role; // 구매자/판매자 역할 Enum
 
     // 구매자와 판매자의 연관 관계 설정
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "buyer_id")
     private Member buyer;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "seller_id")
     private Member seller;
 

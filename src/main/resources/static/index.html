@@ -98,7 +98,7 @@
         const messageContent = $("#name").val();
 
         // 하드코딩된 username
-        const sender = "구매자1";  // 하드코딩된 username
+        const sender = "buyer1";  // 하드코딩된 username
 
         if (messageContent && stompClient.connected) {
             const message = {
@@ -106,21 +106,34 @@
                 message: messageContent,
                 chatRoomId: roomId
             };
+            console.log("Log: Attempting to send message:", messageContent, "from sender:", sender);
 
             // 클라이언트에서 메시지 전송
             stompClient.publish({
-                destination: '/app/send/' + roomId,  // 서버의 @MessageMapping 경로와 일치하도록 수정
+                // destination: '/app/send/' + roomId,  // 서버의 @MessageMapping 경로와 일치하도록 수정
+                destination: '/app/' + roomId,
                 body: JSON.stringify(message)
             });
+
+            console.log("Message to send:", message);
         } else {
             alert("Please provide your name and ensure you're connected to the server.");
         }
     }
 
 
+    // function showGreeting(message) {
+    //     $("#greetings").append("<tr><td>" + message + "</td></tr>");
+    // }
     function showGreeting(message) {
-        $("#greetings").append("<tr><td>" + message + "</td></tr>");
+        if (message && message !== 'undefined') {
+            console.log("Received message:", message);  // 메시지 확인을 위한 로그 추가
+            $("#greetings").append("<tr><td>" + message + "</td></tr>");
+        } else {
+            console.error("Received undefined or invalid message:", message);
+        }
     }
+
 
     $(function () {
         $("form").on('submit', (e) => e.preventDefault());

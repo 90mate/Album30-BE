@@ -13,8 +13,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/send");
-        registry.enableSimpleBroker("/room"); // 클라이언트들이 구독할 수 있는 주소
+//        registry.setApplicationDestinationPrefixes("/send");
+//        registry.enableSimpleBroker("/room"); // 클라이언트들이 구독할 수 있는 주소
+        // /topic 구독 경로 설정
+        registry.enableSimpleBroker("/room");
+        // 클라이언트로 메시지를 전송할 목적지 설정
+        registry.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
