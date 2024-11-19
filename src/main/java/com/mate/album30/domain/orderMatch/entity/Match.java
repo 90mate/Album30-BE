@@ -1,4 +1,4 @@
-package com.mate.album30.domain.match.entity;
+package com.mate.album30.domain.orderMatch.entity;
 
 import com.mate.album30.domain.common.BaseEntity;
 import com.mate.album30.domain.member.entity.Member;

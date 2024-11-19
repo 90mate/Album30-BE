@@ -1,11 +1,11 @@
-package com.mate.album30.domain.match.entity;
+package com.mate.album30.domain.orderMatch.entity;
 
 import com.mate.album30.domain.album.entity.Album;
 import com.mate.album30.domain.common.BaseEntity;
 import com.mate.album30.domain.common.enums.DeliveryType;
 import com.mate.album30.domain.common.enums.OrderStatus;
 import com.mate.album30.domain.common.enums.Role;
-import com.mate.album30.domain.match.entity.enums.Components;
+import com.mate.album30.domain.orderMatch.entity.enums.Components;
 import com.mate.album30.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;

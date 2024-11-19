@@ -3,7 +3,7 @@ package com.mate.album30.domain.album.entity;
 import com.mate.album30.domain.album.entity.enums.Category;
 import com.mate.album30.domain.artist.entity.Group;
 import com.mate.album30.domain.common.BaseEntity;
-import com.mate.album30.domain.match.entity.Order;
+import com.mate.album30.domain.orderMatch.entity.Order;
 import jakarta.persistence.*;
 import lombok.*;
 
