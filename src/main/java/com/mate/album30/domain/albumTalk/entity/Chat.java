@@ -26,7 +26,7 @@ public class Chat extends BaseEntity {
     private String message;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom; // 채팅방
 

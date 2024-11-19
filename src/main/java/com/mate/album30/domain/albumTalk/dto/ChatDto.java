@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 public class ChatDto {
+
     private Long chatId;  // 메시지 ID
     private String sender;   // 보낸 사람
     private String message;  // 메시지 내용

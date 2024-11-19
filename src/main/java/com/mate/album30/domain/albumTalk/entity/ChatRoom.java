@@ -2,6 +2,7 @@ package com.mate.album30.domain.albumTalk.entity;
 
 import com.mate.album30.domain.common.BaseEntity;
 import com.mate.album30.domain.common.Role;
+import com.mate.album30.domain.common.enums.OrderStatus;
 import com.mate.album30.domain.member.entity.Member;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class ChatRoom extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role; // 구매자/판매자 역할 Enum
 
+
     // 구매자와 판매자의 연관 관계 설정
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "buyer_id")
@@ -37,6 +39,13 @@ public class ChatRoom extends BaseEntity {
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<Chat> chats = new ArrayList<>(); // 메시지 리스트
+
+    /**
+     * sql join으로 필요한 데이터
+     * member : nickname, account, address
+     * order : orderId, delveryType, price
+     * product : artist, group,
+     * */
 
     public void addMessage(Chat chat) {
         this.chats.add(chat);
