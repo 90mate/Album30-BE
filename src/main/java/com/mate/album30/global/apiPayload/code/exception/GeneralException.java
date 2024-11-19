@@ -12,7 +12,7 @@ public class GeneralException extends RuntimeException {
     private String code;
     private final String message;
 
-    public GeneralException of(ErrorStatus error) {
+    public static GeneralException of(ErrorStatus error) {
         return new GeneralException(error.getHttpStatus(), error.getCode(), error.getMessage());
     }
 }

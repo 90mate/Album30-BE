@@ -2,9 +2,11 @@ package com.mate.album30.domain.member.entity;
 
 import com.mate.album30.domain.album.entity.Bookmark;
 import com.mate.album30.domain.common.BaseEntity;
+import com.mate.album30.domain.match.entity.Order;
 import com.mate.album30.domain.member.entity.enums.Provider;
 import jakarta.persistence.*;
 import lombok.*;
+import org.aspectj.weaver.ast.Or;
 
 import java.util.List;
 
@@ -38,4 +40,7 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders;
 }
