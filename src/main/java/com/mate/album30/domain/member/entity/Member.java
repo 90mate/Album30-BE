@@ -2,6 +2,7 @@ package com.mate.album30.domain.member.entity;
 
 import com.mate.album30.domain.album.entity.Bookmark;
 import com.mate.album30.domain.common.BaseEntity;
+import com.mate.album30.domain.match.entity.Match;
 import com.mate.album30.domain.match.entity.Order;
 import com.mate.album30.domain.member.entity.enums.Provider;
 import jakarta.persistence.*;
@@ -43,4 +44,7 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Match match;
 }
