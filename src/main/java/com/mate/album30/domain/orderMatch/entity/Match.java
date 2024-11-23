@@ -17,8 +17,14 @@ public class Match extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long matchId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false, unique = true)
-    private Member member;
+    @OneToOne
+    private Order buyer;
+
+    @OneToOne
+    private Order seller;
+
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "member_id", nullable = false, unique = true)
+//    private Member member;
 
 }

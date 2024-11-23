@@ -23,7 +23,7 @@ public class Order extends BaseEntity {
     private Long orderId;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus isCompleted;
+    private OrderStatus orderStatus;
 
     @Column(nullable = false)
     private Integer quantity;
