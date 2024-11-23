@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query("SELECT o FROM Order o WHERE o.role = :role AND o.orderStatus = :isCompleted")
+    @Query("SELECT o FROM Order o WHERE o.role = :role AND o.orderStatus = :orderStatus")
     List<Order> findByRoleAndOrderStatus(@Param("role") Role role,
                                          @Param("orderStatus") OrderStatus orderStatus,
                                          Sort sort);

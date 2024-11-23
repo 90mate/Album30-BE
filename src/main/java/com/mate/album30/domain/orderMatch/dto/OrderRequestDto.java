@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class OrderRequestDto {
-    private OrderStatus isCompleted;
+    private OrderStatus orderStatus;
     private Integer quantity;
     private Components components;
     private Integer price;

@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "match")
+@Table(name = "matching")
 public class Match extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

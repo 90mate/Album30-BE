@@ -40,7 +40,7 @@ public class OrderService {
 
         // Order 생성
         Order order = Order.builder()
-                .orderStatus(orderRequestDto.getIsCompleted())
+                .orderStatus(orderRequestDto.getOrderStatus())
                 .quantity(orderRequestDto.getQuantity())
                 .components(orderRequestDto.getComponents())
                 .price(orderRequestDto.getPrice())
