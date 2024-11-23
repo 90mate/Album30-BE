@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -88,6 +89,7 @@ public class OrderService {
                     matching.setBuyer(buyer);
                     matching.setSeller(seller);
 
+
                     matchings.add(matching);
 
                     // 매칭이 완료된 거래를 제외
@@ -100,5 +102,12 @@ public class OrderService {
         // 매칭 결과를 저장소에 저장
         matchingRepository.saveAll(matchings);
         return matchings;
+    }
+
+    // 매칭 결과를 매칭 날짜에 따라 내림차순으로 정렬하는 메서드
+    public List<Match> getSortedMatchesByDate() {
+        List<Match> matches = matchingRepository.findAll();
+        matches.sort(Comparator.comparing(Match::getCreatedAt).reversed());
+        return matches;
     }
 }

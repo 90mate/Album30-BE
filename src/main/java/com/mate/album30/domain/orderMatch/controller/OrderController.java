@@ -41,5 +41,12 @@ public class OrderController {
         return orderService.matchOrders();
     }
 
+    // 매칭된 결과를 내림차순 정렬하여 반환
+    @GetMapping("/matching/history")
+    public ResponseEntity<List<Match>> getSortedMatches() {
+        List<Match> sortedMatches = orderService.getSortedMatchesByDate();
+        return ResponseEntity.ok(sortedMatches);
+    }
+
 
 }
