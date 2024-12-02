@@ -35,7 +35,7 @@ public class OrderController {
         return orderService.getSortedOrders(role, orderStatus);
     }
 
-    // 매칭된 거래 리스트 조회
+    // 매칭된 거래 리스트 조회 -> 생성된 채팅방 id 반환
     @GetMapping("/match")
     public List<Match> getMatchedOrders() {
         return orderService.matchOrders();

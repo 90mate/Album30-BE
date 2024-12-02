@@ -13,6 +13,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -27,18 +28,44 @@ public class ChatController {
     @SendTo("/room/{roomId}")   // 구독하고 있는 장소로 메시지 전송 (목적지) -> WebSocketConfig Broker에서 적용한 건 앞에 붙어줘야됨
     public ChatDto chat(@DestinationVariable Long roomId, ChatDto receivedChatDto) {
         logger.info("Received message from sender: {} for roomId: {}", receivedChatDto.getSender(), roomId);
+        // Todo 토큰값으로 메세지 전송 가능 여부 판별
 
-        // 채팅 저장
-        Chat chat = chatService.createChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage());
+        // 메시지 유형에 따른 처리
+        Chat chat;
+        switch (receivedChatDto.getType()) {
+            case "message":
+                chat = chatService.createChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage());
+                break;
+            case "address":
+            case "delivery":
+                chat = chatService.createQuicklChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage(), receivedChatDto.getType());
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported chat type: " + receivedChatDto.getType());
+        }
 
-        logger.info("Chat saved: {}", chat);  // 저장된 채팅 객체 로그 출력
+        logger.info("Chat saved: {}", chat);
 
         return ChatDto.builder()
                 .chatRoomId(roomId)
                 .sender(chat.getSender())
                 .message(chat.getMessage())
+                .type(chat.getType())
                 .build();
     }
+
+
+    //    @PostMapping("/{chatRoom}")
+//    public void sendQuickIconMessage(@PathVariable(name = "chatRoomId") Long chatRoomId,
+//                                   @RequestParam(name = "icon") String iconName,
+//                               @RequestParam(name = "memberId") Long memberId
+//
+//    ) {
+//        // Todo 검증하기
+//        // order에 완료 표시 & 두명다 완료 시 -> chatRoom도 상태 변환
+//        albumTalkService.changeStatusOrderAndChatRoom(chatRoomId, orderStatus, memberId);
+//
+//    }
 
 
 }

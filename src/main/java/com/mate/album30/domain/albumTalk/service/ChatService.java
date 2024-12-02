@@ -41,12 +41,27 @@ public class ChatService {
                 .message(message)
                 .sendAt(LocalDateTime.now())
                 .isChecked(false)
-                .messageTypeId(1L)
+                .type("message")
                 .build();
 
         // Chat 객체를 데이터베이스에 저장
         return chatRepository.save(chat);
     }
+    @Transactional
+    public Chat createQuicklChat(Long roomId, String sender, String message, String type) {
+    // ChatRoom 엔티티를 roomId로 조회 (Optional 처리)
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid chat room ID: " + roomId));
+        return chatRepository.save(
+                Chat.builder()
+                        .chatRoom(chatRoom)
+                        .sender(sender)
+                        .message(message)
+                        .type(type)
+                        .build()
+        );
+    }
+
     public List<ChatDto> getChatHistory(Long roomId) {
     // TOdo 예외 처리
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)

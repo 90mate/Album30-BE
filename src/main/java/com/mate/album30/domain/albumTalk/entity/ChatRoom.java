@@ -22,16 +22,19 @@ public class ChatRoom extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatRoomId;
 
-    private Long productId; // 상품 ID
+//    private Long productId; // 상품 ID
 
-    @Enumerated(EnumType.STRING)
-    private Role role; // 구매자/판매자 역할 Enum
+//    @Enumerated(EnumType.STRING)
+//    private Role role; // 구매자/판매자 역할 Enum
 
     @OneToOne
     private Match match;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<Chat> chats = new ArrayList<>(); // 메시지 리스트
+
+    private boolean isCompleted;
+
 
     /**
      * sql join으로 필요한 데이터

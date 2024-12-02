@@ -19,7 +19,7 @@ public class Chat extends BaseEntity {
     private LocalDateTime sendAt;
     private boolean isChecked;
 
-    private Long messageTypeId;
+    private String type;
     // 유저 고유 닉네임을 넣어줘야함
     private String sender;
 
@@ -38,11 +38,12 @@ public class Chat extends BaseEntity {
      * @param message 내용
      * @return Chat Entity
      */
-    public static Chat createChat(ChatRoom room, String sender, String message) {
+    public static Chat createChat(ChatRoom room, String sender, String message, String type) {
         return Chat.builder()
                 .chatRoom(room)
                 .sender(sender)
                 .message(message)
+                .type(type)
                 .build();
     }
 

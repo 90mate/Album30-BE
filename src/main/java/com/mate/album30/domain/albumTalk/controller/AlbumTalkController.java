@@ -28,5 +28,19 @@ public class AlbumTalkController {
         return albumTalkService.getChatRoomInfo(roomId);
     }
 
+    @PostMapping("/{chatRoom}")
+    public void changeChatRoomStatus(@PathVariable(name = "chatRoomId") Long chatRoomId,
+                                   @RequestParam(name = "status") String orderStatus,
+                               @RequestParam(name = "memberId") Long memberId
+
+    ) {
+        // Todo 검증하기
+        // order에 완료 표시 & 두명다 완료 시 -> chatRoom도 상태 변환
+        albumTalkService.changeStatusOrderAndChatRoom(chatRoomId, orderStatus, memberId);
+
+    }
+
+
+
 
 }
