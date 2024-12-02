@@ -40,24 +40,6 @@ public class Member extends BaseEntity {
     @Column
     private Boolean isActivated;
 
-    // 양방향 연관 관계 설정 (구매한 거래)
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
-    private List<ChatRoom> boughtChatRoomList = new ArrayList<>();
-
-    // 양방향 연관 관계 설정 (판매한 거래)
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
-    private List<ChatRoom> soldChatRoomList = new ArrayList<>();
-
-    public void addBoughtAlbumTalk(ChatRoom chatRoom) {
-        this.boughtChatRoomList.add(chatRoom);
-        chatRoom.setBuyer(this);
-    }
-
-    public void addSoldAlbumTalk(ChatRoom chatRoom) {
-        this.soldChatRoomList.add(chatRoom);
-        chatRoom.setSeller(this);
-    }
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks;
 

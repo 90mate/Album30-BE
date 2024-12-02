@@ -23,15 +23,13 @@ public class ChatResponseDto {
         OrderStatus sellerStatus;
         LocalDateTime updatedAt;
         String recentChat;
-        Long buyerId;
-        Long sellerId;
-        String sellerNickName;
+        String buyer;
+        String seller;
 
 
         /**
          * 쿼리 필요
          * */
-        Long orderId;
         DeliveryType deliveryType;
         String group;
         String artist;
@@ -44,11 +42,9 @@ public class ChatResponseDto {
 //                    .sellerStatus(room.getSellerStatus())
                     .updatedAt(room.getUpdatedAt())
 //                    .recentChat(room.getChats().get)
-                    .buyerId(room.getBuyer().getMemberId())
-                    .sellerId(room.getSeller().getMemberId())
-                    .sellerNickName(room.getSeller().getNickName())
+                    .buyer(room.getMatch().getBuyer().getMember().getNickName())
+                    .seller(room.getMatch().getSeller().getMember().getNickName())
 
-                    .orderId(room.getOrderId())
 //                    .deliveryType(room.getOrderId().deleveryType)
 //                    .group(room.)
 //                    .artist()

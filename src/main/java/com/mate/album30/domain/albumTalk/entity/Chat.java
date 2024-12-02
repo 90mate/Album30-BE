@@ -20,6 +20,7 @@ public class Chat extends BaseEntity {
     private boolean isChecked;
 
     private Long messageTypeId;
+    // 유저 고유 닉네임을 넣어줘야함
     private String sender;
 
     @Column(columnDefinition = "TEXT")

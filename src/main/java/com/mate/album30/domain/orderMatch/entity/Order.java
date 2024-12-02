@@ -51,4 +51,5 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+
 }
