@@ -14,7 +14,7 @@ public class OrderRequestDto {
     private Integer price;
     private DeliveryType deliveryType;
     private Integer period;
-    private Role role;
+    private Role role; // 판매자인지, 구매자인지
     private Long albumId; // Album의 ID
     private Long memberId; // Member의 ID
 }
