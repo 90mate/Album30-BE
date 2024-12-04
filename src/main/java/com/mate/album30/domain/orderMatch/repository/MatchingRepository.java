@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface MatchingRepository extends JpaRepository<Match, Long> {
-    @Query("SELECT m FROM Match m WHERE m.buyer.album.id = :albumId OR m.seller.album.id = :albumId")
+    @Query("SELECT m FROM Match m WHERE m.buyer.album.albumId = :albumId OR m.seller.album.albumId = :albumId")
     List<Match> findByAlbumId(@Param("albumId") Long albumId);
 }
 

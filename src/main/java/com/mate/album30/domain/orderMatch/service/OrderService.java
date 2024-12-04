@@ -89,14 +89,14 @@ public class OrderService {
         Map<String, List<Order>> result = new HashMap<>();
 
         // BUYER 기준으로 상태별 조회
-        result.put("BUYER_ONGOING", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.BUYER, OrderStatus.ONGOING));
-        result.put("BUYER_MATCHED", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.BUYER, OrderStatus.MATCHED));
-        result.put("BUYER_COMPLETION", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.BUYER, OrderStatus.COMPLETION));
+        result.put("BUYER_ONGOING", orderRepository.findByMember_MemberIdAndRoleAndOrderStatus(memberId, Role.BUYER, OrderStatus.ONGOING));
+        result.put("BUYER_MATCHED", orderRepository.findByMember_MemberIdAndRoleAndOrderStatus(memberId, Role.BUYER, OrderStatus.MATCHED));
+        result.put("BUYER_COMPLETION", orderRepository.findByMember_MemberIdAndRoleAndOrderStatus(memberId, Role.BUYER, OrderStatus.COMPLETION));
 
         // SELLER 기준으로 상태별 조회
-        result.put("SELLER_ONGOING", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.SELLER, OrderStatus.ONGOING));
-        result.put("SELLER_MATCHED", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.SELLER, OrderStatus.MATCHED));
-        result.put("SELLER_COMPLETION", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.SELLER, OrderStatus.COMPLETION));
+        result.put("SELLER_ONGOING", orderRepository.findByMember_MemberIdAndRoleAndOrderStatus(memberId, Role.SELLER, OrderStatus.ONGOING));
+        result.put("SELLER_MATCHED", orderRepository.findByMember_MemberIdAndRoleAndOrderStatus(memberId, Role.SELLER, OrderStatus.MATCHED));
+        result.put("SELLER_COMPLETION", orderRepository.findByMember_MemberIdAndRoleAndOrderStatus(memberId, Role.SELLER, OrderStatus.COMPLETION));
 
         return result;
     }
@@ -114,7 +114,7 @@ public class OrderService {
             sort = Sort.by(Sort.Order.desc("price"), Sort.Order.asc("createdAt"));
         }
 
-        return orderRepository.findByRoleAndOrderStatusAndAlbumId(role, orderStatus, albumId, sort);
+        return orderRepository.findByRoleAndOrderStatusAndAlbum_AlbumId(role, orderStatus, albumId, sort);
     }
 
     // 특정 앨범의 매칭된 거래를 반환하는 메서드

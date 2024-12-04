@@ -22,7 +22,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findByRole(Role role);
 
-    List<Order> findByMemberIdAndRoleAndOrderStatus(Long memberId, Role role, OrderStatus orderStatus);
+    List<Order> findByMember_MemberIdAndRoleAndOrderStatus(Long memberId, Role role, OrderStatus orderStatus);
 
-    List<Order> findByRoleAndOrderStatusAndAlbumId(Role role, OrderStatus orderStatus, Long albumId, Sort sort);
+    List<Order> findByRoleAndOrderStatusAndAlbum_AlbumId(Role role, OrderStatus orderStatus, Long albumId, Sort sort);
 }
