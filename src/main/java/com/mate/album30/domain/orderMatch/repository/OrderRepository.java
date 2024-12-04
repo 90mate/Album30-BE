@@ -21,4 +21,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                                          Sort sort);
 
     List<Order> findByRole(Role role);
+
+    List<Order> findByMember_MemberIdAndRoleAndOrderStatus(Long memberId, Role role, OrderStatus orderStatus);
+
+    List<Order> findByRoleAndOrderStatusAndAlbum_AlbumId(Role role, OrderStatus orderStatus, Long albumId, Sort sort);
 }

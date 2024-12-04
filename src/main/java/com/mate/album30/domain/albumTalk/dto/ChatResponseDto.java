@@ -44,7 +44,6 @@ public class ChatResponseDto {
 //                    .sellerStatus(room.getSellerStatus())
                     .updatedAt(room.getUpdatedAt())
 //                    .recentChat(room.getChats().get)
-                    .buyerId(room.getBuyer().getMemberId())
                     .sellerId(room.getSeller().getMemberId())
                     .sellerNickName(room.getSeller().getNickName())
 
