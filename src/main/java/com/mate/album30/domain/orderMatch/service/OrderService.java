@@ -16,9 +16,7 @@ import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -87,8 +85,25 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    public Map<String, List<Order>> getOrdersByUserAndStatus(Long memberId) {
+        Map<String, List<Order>> result = new HashMap<>();
+
+        // BUYER 기준으로 상태별 조회
+        result.put("BUYER_ONGOING", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.BUYER, OrderStatus.ONGOING));
+        result.put("BUYER_MATCHED", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.BUYER, OrderStatus.MATCHED));
+        result.put("BUYER_COMPLETION", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.BUYER, OrderStatus.COMPLETION));
+
+        // SELLER 기준으로 상태별 조회
+        result.put("SELLER_ONGOING", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.SELLER, OrderStatus.ONGOING));
+        result.put("SELLER_MATCHED", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.SELLER, OrderStatus.MATCHED));
+        result.put("SELLER_COMPLETION", orderRepository.findByMemberIdAndRoleAndOrderStatus(memberId, Role.SELLER, OrderStatus.COMPLETION));
+
+        return result;
+    }
+
+
     // 조건에 맞는 Order 목록 조회
-    public List<Order> getSortedOrders(Role role, OrderStatus orderStatus) {
+    public List<Order> getSortedOrders(Long albumId, Role role, OrderStatus orderStatus) {
         Sort sort = null;
 
         if (role == Role.SELLER && orderStatus == OrderStatus.ONGOING) {
@@ -99,19 +114,17 @@ public class OrderService {
             sort = Sort.by(Sort.Order.desc("price"), Sort.Order.asc("createdAt"));
         }
 
-        return orderRepository.findByRoleAndOrderStatus(role, orderStatus, sort);
+        return orderRepository.findByRoleAndOrderStatusAndAlbumId(role, orderStatus, albumId, sort);
     }
 
-    // 매칭된 거래를 반환하는 메서드
-    // 매칭된 거래를 반환하는 메서드
-    public List<Match> getMatchedOrders() {
-        // 매칭된 거래를 모두 조회
-        return matchingRepository.findAll();
+    // 특정 앨범의 매칭된 거래를 반환하는 메서드
+    public List<Match> getMatchedOrders(Long albumId) {
+        return matchingRepository.findByAlbumId(albumId);
     }
 
-    // 매칭 결과를 매칭 날짜에 따라 내림차순으로 정렬하는 메서드
-    public List<Match> getSortedMatchesByDate() {
-        List<Match> matches = matchingRepository.findAll();
+    // 특정 앨범의 매칭 결과를 매칭 날짜에 따라 내림차순으로 정렬하는 메서드
+    public List<Match> getSortedMatchesByDate(Long albumId) {
+        List<Match> matches = matchingRepository.findByAlbumId(albumId);
         matches.sort(Comparator.comparing(Match::getCreatedAt).reversed());
         return matches;
     }
