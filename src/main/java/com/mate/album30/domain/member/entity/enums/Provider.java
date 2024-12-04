@@ -4,5 +4,5 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum Provider {
-    NAVER
+    NAVER, KAKAO
 }
