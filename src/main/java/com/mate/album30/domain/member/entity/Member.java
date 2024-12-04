@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity @Builder
 @Table(name = "member")
 public class Member extends BaseEntity {
     @Id
@@ -20,6 +20,8 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Provider provider;
+
+    private String providerId;
 
     @Column(unique = true)
     private String nickName;
@@ -32,6 +34,12 @@ public class Member extends BaseEntity {
 
     @Column
     private String phoneNumber;
+
+    @Column
+    private String email;
+
+    @Column
+    private String password;
 
     @Column
     private Boolean isActivated;
