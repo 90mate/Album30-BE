@@ -3,6 +3,7 @@ package com.mate.album30.domain.album.entity;
 import com.mate.album30.domain.album.entity.enums.Category;
 import com.mate.album30.domain.artist.entity.Group;
 import com.mate.album30.domain.common.BaseEntity;
+import com.mate.album30.domain.orderMatch.entity.Order;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,5 +39,8 @@ public class Album extends BaseEntity {
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks;
+
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders;
 
 }
