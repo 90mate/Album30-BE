@@ -38,7 +38,7 @@ public class OrderController {
     // 매칭된 거래 리스트 조회
     @GetMapping("/match")
     public List<Match> getMatchedOrders() {
-        return orderService.matchOrders();
+        return orderService.getMatchedOrders();
     }
 
     // 매칭된 결과를 내림차순 정렬하여 반환

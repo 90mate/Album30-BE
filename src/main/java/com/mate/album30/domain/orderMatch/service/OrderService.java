@@ -52,6 +52,38 @@ public class OrderService {
                 .member(member)
                 .build();
 
+        // 매칭 로직
+        List<Order> potentialMatches;
+        if (order.getRole() == Role.BUYER) {
+            // 구매자라면 판매자 목록 조회
+            potentialMatches = orderRepository.findByRole(Role.SELLER);
+        } else if (order.getRole() == Role.SELLER) {
+            // 판매자라면 구매자 목록 조회
+            potentialMatches = orderRepository.findByRole(Role.BUYER);
+        } else {
+            throw new IllegalArgumentException("Invalid role");
+        }
+
+        for (Order potentialMatch : potentialMatches) {
+            if (order.getPrice().equals(potentialMatch.getPrice()) &&
+                    order.getComponents().equals(potentialMatch.getComponents())) {
+
+                // 매칭된 결과를 저장
+                Match match = new Match();
+                match.setBuyer(order.getRole() == Role.BUYER ? order : potentialMatch);
+                match.setSeller(order.getRole() == Role.SELLER ? order : potentialMatch);
+
+                matchingRepository.save(match);
+
+                // 매칭된 Order는 처리 완료 상태로 업데이트
+                potentialMatch.setOrderStatus(OrderStatus.MATCHED);
+                order.setOrderStatus(OrderStatus.MATCHED);
+                orderRepository.save(potentialMatch);
+                break;
+            }
+        }
+
+        // 매칭되지 않은 Order 저장
         return orderRepository.save(order);
     }
 
@@ -71,37 +103,10 @@ public class OrderService {
     }
 
     // 매칭된 거래를 반환하는 메서드
-    public List<Match> matchOrders() {
-        // 구매자와 판매자 거래를 각각 조회
-        List<Order> buyers = orderRepository.findByRole(Role.BUYER);
-        List<Order> sellers = orderRepository.findByRole(Role.SELLER);
-
-        List<Match> matchings = new ArrayList<>();
-
-        // 매칭 로직: 가격과 구성품이 같을 때 매칭
-        for (Order buyer : buyers) {
-            for (Order seller : sellers) {
-                if (buyer.getPrice().equals(seller.getPrice()) &&
-                        buyer.getComponents().equals(seller.getComponents())) {
-
-                    // 매칭된 결과를 저장
-                    Match matching = new Match();
-                    matching.setBuyer(buyer);
-                    matching.setSeller(seller);
-
-
-                    matchings.add(matching);
-
-                    // 매칭이 완료된 거래를 제외
-                    sellers.remove(seller);
-                    break;
-                }
-            }
-        }
-
-        // 매칭 결과를 저장소에 저장
-        matchingRepository.saveAll(matchings);
-        return matchings;
+    // 매칭된 거래를 반환하는 메서드
+    public List<Match> getMatchedOrders() {
+        // 매칭된 거래를 모두 조회
+        return matchingRepository.findAll();
     }
 
     // 매칭 결과를 매칭 날짜에 따라 내림차순으로 정렬하는 메서드
