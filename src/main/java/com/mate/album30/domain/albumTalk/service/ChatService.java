@@ -5,6 +5,8 @@ import com.mate.album30.domain.albumTalk.entity.Chat;
 import com.mate.album30.domain.albumTalk.entity.ChatRoom;
 import com.mate.album30.domain.albumTalk.repository.ChatRepository;
 import com.mate.album30.domain.albumTalk.repository.ChatRoomRepository;
+import com.mate.album30.domain.member.entity.Member;
+import com.mate.album30.domain.member.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +23,41 @@ public class ChatService {
 
     private final ChatRepository chatRepository;  // Chat 데이터를 처리할 Repository
     private final ChatRoomRepository chatRoomRepository;  // ChatRoom 데이터를 처리할 Repository
+    private final MemberRepository memberRepository;
     @PersistenceContext
     private EntityManager entityManager;  // EntityManager 주입
 
+    @Transactional
+    public Chat decideNormalChatOrQuickChat(Long roomId, ChatDto receivedChatDto) {
+        Member member = memberRepository.findMemberByMemberId(receivedChatDto.getSenderId());
+        // 메시지 유형에 따른 처리
+        Chat chat;
+        switch (receivedChatDto.getType()) {
+            case "message":
+                chat = createChat(roomId, receivedChatDto.getSenderId(), receivedChatDto.getMessage());
+                break;
+            case "address":
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "주소 정보", receivedChatDto.getType());
+                break;
+            case "accont" :
+                // Todo 계좌 정보로 수정
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "계좌정보", receivedChatDto.getType());
+                break;
+            case "delivery":
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), receivedChatDto.getMessage(), receivedChatDto.getType());
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unsupported chat type: " + receivedChatDto.getType());
+        }
+        return chat;
+    }
+
+
+
     // 채팅 메시지 저장하는 메서드
 @Transactional  // 트랜잭션 관리 어노테이션 추가
-    public Chat createChat(Long roomId, String sender, String message) {
+    public Chat createChat(Long roomId, Long senderId, String message) {
         // ChatRoom 엔티티를 roomId로 조회 (Optional 처리)
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid chat room ID: " + roomId));
@@ -37,16 +68,33 @@ public class ChatService {
         // Chat 객체 생성
         Chat chat = Chat.builder()
                 .chatRoom(chatRoom)
-                .sender(sender)
+                .senderId(senderId)
                 .message(message)
                 .sendAt(LocalDateTime.now())
                 .isChecked(false)
-                .messageTypeId(1L)
+                .type("message")
                 .build();
 
         // Chat 객체를 데이터베이스에 저장
         return chatRepository.save(chat);
     }
+    @Transactional
+    public Chat createQuicklChat(Long roomId, Long senderId, String message, String type) {
+    // ChatRoom 엔티티를 roomId로 조회 (Optional 처리)
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid chat room ID: " + roomId));
+        return chatRepository.save(
+                Chat.builder()
+                        .chatRoom(chatRoom)
+                        .senderId(senderId)
+                        .message(message)
+                        .type(type)
+                        .build()
+        );
+
+    }
+
+
     public List<ChatDto> getChatHistory(Long roomId) {
     // TOdo 예외 처리
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
@@ -58,7 +106,7 @@ public class ChatService {
                 .map(chat -> ChatDto.builder()
                         .chatId(chat.getChatId())
                         .chatRoomId(chatRoom.getChatRoomId())
-                        .sender(chat.getSender())
+                        .senderId(chat.getSenderId())
                         .message(chat.getMessage())
                         .build())
                 .collect(Collectors.toList());

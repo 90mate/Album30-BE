@@ -4,6 +4,7 @@ import com.mate.album30.domain.common.BaseEntity;
 import com.mate.album30.domain.common.Role;
 import com.mate.album30.domain.common.enums.OrderStatus;
 import com.mate.album30.domain.member.entity.Member;
+import com.mate.album30.domain.orderMatch.entity.Match;
 import lombok.*;
 
 import jakarta.persistence.*;
@@ -21,24 +22,19 @@ public class ChatRoom extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatRoomId;
 
-    private Long productId; // 상품 ID
-    private Long orderId;   // 주문 ID
+//    private Long productId; // 상품 ID
 
-    @Enumerated(EnumType.STRING)
-    private Role role; // 구매자/판매자 역할 Enum
+//    @Enumerated(EnumType.STRING)
+//    private Role role; // 구매자/판매자 역할 Enum
 
-
-    // 구매자와 판매자의 연관 관계 설정
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "buyer_id")
-    private Member buyer;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "seller_id")
-    private Member seller;
+    @OneToOne
+    private Match match;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<Chat> chats = new ArrayList<>(); // 메시지 리스트
+
+    private boolean isCompleted;
+
 
     /**
      * sql join으로 필요한 데이터

@@ -1,5 +1,6 @@
 package com.mate.album30.domain.orderMatch.entity;
 
+import com.mate.album30.domain.albumTalk.entity.ChatRoom;
 import com.mate.album30.domain.common.BaseEntity;
 import com.mate.album30.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -22,6 +23,9 @@ public class Match extends BaseEntity {
 
     @OneToOne
     private Order seller;
+
+    @OneToOne
+    private ChatRoom chatRoom;
 
 //    @OneToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id", nullable = false, unique = true)
