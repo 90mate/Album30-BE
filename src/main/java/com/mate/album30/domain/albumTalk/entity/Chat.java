@@ -21,7 +21,7 @@ public class Chat extends BaseEntity {
 
     private String type;
     // 유저 고유 닉네임을 넣어줘야함
-    private String sender;
+    private Long senderId;
 
     @Column(columnDefinition = "TEXT")
     private String message;
@@ -34,14 +34,14 @@ public class Chat extends BaseEntity {
     /**
      * 채팅 생성
      * @param room 채팅 방
-     * @param sender 보낸이
+     * @param senderId 보낸이
      * @param message 내용
      * @return Chat Entity
      */
-    public static Chat createChat(ChatRoom room, String sender, String message, String type) {
+    public static Chat createChat(ChatRoom room, Long senderId, String message, String type) {
         return Chat.builder()
                 .chatRoom(room)
-                .sender(sender)
+                .senderId(senderId)
                 .message(message)
                 .type(type)
                 .build();

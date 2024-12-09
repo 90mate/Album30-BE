@@ -45,6 +45,7 @@ public class ChatResponseDto {
                     .buyer(room.getMatch().getBuyer().getMember().getNickName())
                     .seller(room.getMatch().getSeller().getMember().getNickName())
 
+
 //                    .deliveryType(room.getOrderId().deleveryType)
 //                    .group(room.)
 //                    .artist()

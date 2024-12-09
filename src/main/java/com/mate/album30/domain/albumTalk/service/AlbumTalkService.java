@@ -32,12 +32,14 @@ public class AlbumTalkService {
         return ChatResponseDto.ChatRoomResponseDto.convertToChatRoomDto(room);
     }
     public void createChatRoomAfterMatch(Match match) {
-        // match에서 order을 가져옴
+        // match를 저장함 -> 추후 멤버 정보가 필요하면 match에서 꺼내서 사용.
         ChatRoom chatRoom = ChatRoom.builder()
-                .match(match).build();
+                .match(match)
+                .build();
 
         // 채팅방을 생성 함 -> 저장함
         chatRoomRepository.save(chatRoom);
+        match.setChatRoom(chatRoom);
 
     }
     @Transactional

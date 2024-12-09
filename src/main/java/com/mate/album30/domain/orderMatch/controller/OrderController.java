@@ -1,5 +1,6 @@
 package com.mate.album30.domain.orderMatch.controller;
 
+import com.mate.album30.domain.album.entity.Album;
 import com.mate.album30.domain.common.enums.OrderStatus;
 import com.mate.album30.domain.common.enums.Role;
 import com.mate.album30.domain.orderMatch.dto.OrderRequestDto;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/order")
@@ -27,26 +29,33 @@ public class OrderController {
     }
 
     // 거래 등록 리스트 조회
-    @GetMapping("/sorted")
+    @GetMapping("/orders")
     public List<Order> getSortedOrders(
+            @RequestParam Long albumId,
             @RequestParam Role role,
             @RequestParam OrderStatus orderStatus
     ) {
-        return orderService.getSortedOrders(role, orderStatus);
+        return orderService.getSortedOrders(albumId, role, orderStatus);
     }
 
-    // 매칭된 거래 리스트 조회 -> 생성된 채팅방 id 반환
-    @GetMapping("/match")
-    public List<Match> getMatchedOrders() {
-        return orderService.matchOrders();
+
+    // 매칭된 거래 리스트 조회
+    @GetMapping("/matches")
+    public ResponseEntity<List<Match>> getMatchedOrders(@PathVariable Long albumId) {
+        return ResponseEntity.ok(orderService.getMatchedOrders(albumId));
+
     }
 
     // 매칭된 결과를 내림차순 정렬하여 반환
-    @GetMapping("/matching/history")
-    public ResponseEntity<List<Match>> getSortedMatches() {
-        List<Match> sortedMatches = orderService.getSortedMatchesByDate();
-        return ResponseEntity.ok(sortedMatches);
+    @GetMapping("/matches/sorted")
+    public ResponseEntity<List<Match>> getSortedMatchesByDate(@PathVariable Long albumId) {
+        return ResponseEntity.ok(orderService.getSortedMatchesByDate(albumId));
     }
 
+    // 사용자 별 거래 리스트 반환
+    @GetMapping("/user/{memberId}")
+    public ResponseEntity<Map<String, List<Order>>> getOrdersByUserAndStatus(@PathVariable Long memberId) {
+        return ResponseEntity.ok(orderService.getOrdersByUserAndStatus(memberId));
+    }
 
 }

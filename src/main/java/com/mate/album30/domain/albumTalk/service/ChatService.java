@@ -29,22 +29,22 @@ public class ChatService {
 
     @Transactional
     public Chat decideNormalChatOrQuickChat(Long roomId, ChatDto receivedChatDto) {
-        Member member = memberRepository.findMemberByNickName(receivedChatDto.getSender());
+        Member member = memberRepository.findMemberByMemberId(receivedChatDto.getSenderId());
         // 메시지 유형에 따른 처리
         Chat chat;
         switch (receivedChatDto.getType()) {
             case "message":
-                chat = createChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage());
+                chat = createChat(roomId, receivedChatDto.getSenderId(), receivedChatDto.getMessage());
                 break;
             case "address":
-                chat = createQuicklChat(roomId, receivedChatDto.getSender(), "주소 정보", receivedChatDto.getType());
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "주소 정보", receivedChatDto.getType());
                 break;
             case "accont" :
                 // Todo 계좌 정보로 수정
-                chat = createQuicklChat(roomId, receivedChatDto.getSender(), "계좌정보", receivedChatDto.getType());
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "계좌정보", receivedChatDto.getType());
                 break;
             case "delivery":
-                chat = createQuicklChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage(), receivedChatDto.getType());
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), receivedChatDto.getMessage(), receivedChatDto.getType());
                 break;
 
             default:
@@ -57,7 +57,7 @@ public class ChatService {
 
     // 채팅 메시지 저장하는 메서드
 @Transactional  // 트랜잭션 관리 어노테이션 추가
-    public Chat createChat(Long roomId, String sender, String message) {
+    public Chat createChat(Long roomId, Long senderId, String message) {
         // ChatRoom 엔티티를 roomId로 조회 (Optional 처리)
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid chat room ID: " + roomId));
@@ -68,7 +68,7 @@ public class ChatService {
         // Chat 객체 생성
         Chat chat = Chat.builder()
                 .chatRoom(chatRoom)
-                .sender(sender)
+                .senderId(senderId)
                 .message(message)
                 .sendAt(LocalDateTime.now())
                 .isChecked(false)
@@ -79,14 +79,14 @@ public class ChatService {
         return chatRepository.save(chat);
     }
     @Transactional
-    public Chat createQuicklChat(Long roomId, String sender, String message, String type) {
+    public Chat createQuicklChat(Long roomId, Long senderId, String message, String type) {
     // ChatRoom 엔티티를 roomId로 조회 (Optional 처리)
         ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid chat room ID: " + roomId));
         return chatRepository.save(
                 Chat.builder()
                         .chatRoom(chatRoom)
-                        .sender(sender)
+                        .senderId(senderId)
                         .message(message)
                         .type(type)
                         .build()
@@ -106,7 +106,7 @@ public class ChatService {
                 .map(chat -> ChatDto.builder()
                         .chatId(chat.getChatId())
                         .chatRoomId(chatRoom.getChatRoomId())
-                        .sender(chat.getSender())
+                        .senderId(chat.getSenderId())
                         .message(chat.getMessage())
                         .build())
                 .collect(Collectors.toList());

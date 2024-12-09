@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class ChatDto {
 
     private Long chatId;  // 메시지 ID
-    private String sender;   // 보낸 사람
+    private Long senderId;   // 보낸 사람
     private String message;  // 메시지 내용
     private Long chatRoomId;  // 채팅방 ID
     private String type; // "message", "address", "delivery" 등
@@ -21,7 +21,7 @@ public class ChatDto {
     public static ChatDto createChatDto(Chat chat) {
         return ChatDto.builder()
                 .chatId(chat.getChatId())
-                .sender(chat.getSender())
+                .senderId(chat.getSenderId())
                 .message(chat.getMessage())
                 .type(chat.getType())
 //                .sendAt(chat.getSendAt())  // 메시지 발송 시간

@@ -5,6 +5,7 @@ import com.mate.album30.domain.albumTalk.dto.ChatResponseDto;
 import com.mate.album30.domain.albumTalk.repository.ChatRepository;
 import com.mate.album30.domain.albumTalk.service.AlbumTalkService;
 import com.mate.album30.domain.albumTalk.service.ChatService;
+import com.mate.album30.global.auth.annotation.LoginInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,10 @@ public class AlbumTalkController {
     }
 
     @PostMapping("/{chatRoom}")
-    public void changeChatRoomStatus(@PathVariable(name = "chatRoomId") Long chatRoomId,
-                                   @RequestParam(name = "status") String orderStatus,
-                               @RequestParam(name = "memberId") Long memberId
+    public void changeChatRoomStatus(@LoginInfo Long memberId,
+                                     @PathVariable(name = "chatRoomId") Long chatRoomId,
+                                     @RequestParam(name = "status") String orderStatus
+
 
     ) {
         // Todo 검증하기

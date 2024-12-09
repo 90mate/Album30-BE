@@ -27,7 +27,7 @@ public class ChatController {
     @MessageMapping("/{roomId}") // 여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes에서 적용한 건 앞에 생략
     @SendTo("/room/{roomId}")   // 구독하고 있는 장소로 메시지 전송 (목적지) -> WebSocketConfig Broker에서 적용한 건 앞에 붙어줘야됨
     public ChatDto chat(@DestinationVariable Long roomId, ChatDto receivedChatDto) {
-        logger.info("Received message from sender: {} for roomId: {}", receivedChatDto.getSender(), roomId);
+        logger.info("Received message from sender: {} for roomId: {}", receivedChatDto.getSenderId(), roomId);
         // Todo 토큰값으로 메세지 전송 가능 여부 판별
 
         // 메시지 유형에 따른 처리
@@ -37,7 +37,7 @@ public class ChatController {
 
         return ChatDto.builder()
                 .chatRoomId(roomId)
-                .sender(chat.getSender())
+                .senderId(chat.getSenderId())
                 .message(chat.getMessage())
                 .type(chat.getType())
                 .build();
