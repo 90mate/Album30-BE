@@ -5,6 +5,8 @@ import com.mate.album30.domain.albumTalk.entity.Chat;
 import com.mate.album30.domain.albumTalk.entity.ChatRoom;
 import com.mate.album30.domain.albumTalk.repository.ChatRepository;
 import com.mate.album30.domain.albumTalk.repository.ChatRoomRepository;
+import com.mate.album30.domain.member.entity.Member;
+import com.mate.album30.domain.member.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,37 @@ public class ChatService {
 
     private final ChatRepository chatRepository;  // Chat 데이터를 처리할 Repository
     private final ChatRoomRepository chatRoomRepository;  // ChatRoom 데이터를 처리할 Repository
+    private final MemberRepository memberRepository;
     @PersistenceContext
     private EntityManager entityManager;  // EntityManager 주입
+
+    @Transactional
+    public Chat decideNormalChatOrQuickChat(Long roomId, ChatDto receivedChatDto) {
+        Member member = memberRepository.findMemberByNickName(receivedChatDto.getSender());
+        // 메시지 유형에 따른 처리
+        Chat chat;
+        switch (receivedChatDto.getType()) {
+            case "message":
+                chat = createChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage());
+                break;
+            case "address":
+                chat = createQuicklChat(roomId, receivedChatDto.getSender(), "주소 정보", receivedChatDto.getType());
+                break;
+            case "accont" :
+                // Todo 계좌 정보로 수정
+                chat = createQuicklChat(roomId, receivedChatDto.getSender(), "계좌정보", receivedChatDto.getType());
+                break;
+            case "delivery":
+                chat = createQuicklChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage(), receivedChatDto.getType());
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unsupported chat type: " + receivedChatDto.getType());
+        }
+        return chat;
+    }
+
+
 
     // 채팅 메시지 저장하는 메서드
 @Transactional  // 트랜잭션 관리 어노테이션 추가
@@ -60,7 +91,9 @@ public class ChatService {
                         .type(type)
                         .build()
         );
+
     }
+
 
     public List<ChatDto> getChatHistory(Long roomId) {
     // TOdo 예외 처리

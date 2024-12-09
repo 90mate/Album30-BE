@@ -39,8 +39,8 @@ public class AlbumTalkController {
         albumTalkService.changeStatusOrderAndChatRoom(chatRoomId, orderStatus, memberId);
 
     }
-
-
+    // Todo
+    // quick message보내기(배송지 리스트 중 선택, 계좌, 사진/동영상)
 
 
 }

@@ -31,18 +31,7 @@ public class ChatController {
         // Todo 토큰값으로 메세지 전송 가능 여부 판별
 
         // 메시지 유형에 따른 처리
-        Chat chat;
-        switch (receivedChatDto.getType()) {
-            case "message":
-                chat = chatService.createChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage());
-                break;
-            case "address":
-            case "delivery":
-                chat = chatService.createQuicklChat(roomId, receivedChatDto.getSender(), receivedChatDto.getMessage(), receivedChatDto.getType());
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported chat type: " + receivedChatDto.getType());
-        }
+        Chat chat = chatService.decideNormalChatOrQuickChat(roomId, receivedChatDto);
 
         logger.info("Chat saved: {}", chat);
 
