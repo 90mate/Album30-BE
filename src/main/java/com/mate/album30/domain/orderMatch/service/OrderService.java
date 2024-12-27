@@ -2,6 +2,7 @@ package com.mate.album30.domain.orderMatch.service;
 
 import com.mate.album30.domain.album.entity.Album;
 import com.mate.album30.domain.album.repository.AlbumRepository;
+import com.mate.album30.domain.albumTalk.service.AlbumTalkService;
 import com.mate.album30.domain.common.enums.OrderStatus;
 import com.mate.album30.domain.common.enums.Role;
 import com.mate.album30.domain.member.entity.Member;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -26,8 +28,10 @@ public class OrderService {
     private final AlbumRepository albumRepository;
     private final MemberRepository memberRepository;
     private final MatchingRepository matchingRepository; // 매칭된 거래 저장소
+    private final AlbumTalkService albumTalkService;
 
     // Order 생성
+    @Transactional
     public Order createOrder(OrderRequestDto orderRequestDto){
         //Album 조회
         Album album = albumRepository.findById(orderRequestDto.getAlbumId())
@@ -49,6 +53,7 @@ public class OrderService {
                 .album(album)
                 .member(member)
                 .build();
+        orderRepository.save(order);
 
         // 매칭 로직
         List<Order> potentialMatches;
@@ -72,6 +77,9 @@ public class OrderService {
                 match.setSeller(order.getRole() == Role.SELLER ? order : potentialMatch);
 
                 matchingRepository.save(match);
+                // 채팅방 생성
+                albumTalkService.createChatRoomAfterMatch(match);
+
 
                 // 매칭된 Order는 처리 완료 상태로 업데이트
                 potentialMatch.setOrderStatus(OrderStatus.MATCHED);

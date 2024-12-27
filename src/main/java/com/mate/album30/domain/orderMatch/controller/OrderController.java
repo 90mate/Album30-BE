@@ -38,10 +38,12 @@ public class OrderController {
         return orderService.getSortedOrders(albumId, role, orderStatus);
     }
 
+
     // 매칭된 거래 리스트 조회
     @GetMapping("/matches")
     public ResponseEntity<List<Match>> getMatchedOrders(@PathVariable Long albumId) {
         return ResponseEntity.ok(orderService.getMatchedOrders(albumId));
+
     }
 
     // 매칭된 결과를 내림차순 정렬하여 반환

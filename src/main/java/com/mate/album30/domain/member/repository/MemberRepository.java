@@ -1,7 +1,6 @@
 package com.mate.album30.domain.member.repository;
 
 import com.mate.album30.domain.member.entity.Member;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
