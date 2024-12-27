@@ -25,9 +25,9 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
+    @Column(unique = true)
     private String providerId;
 
-    @Column(unique = true)
     private String nickName;
 
     @Column
@@ -39,7 +39,7 @@ public class Member extends BaseEntity {
     @Column
     private String phoneNumber;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column
