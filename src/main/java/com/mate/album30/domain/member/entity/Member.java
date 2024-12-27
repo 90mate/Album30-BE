@@ -2,6 +2,8 @@ package com.mate.album30.domain.member.entity;
 
 import com.mate.album30.domain.album.entity.Bookmark;
 import com.mate.album30.domain.albumTalk.entity.ChatRoom;
+import com.mate.album30.domain.common.Account;
+import com.mate.album30.domain.common.Address;
 import com.mate.album30.domain.common.BaseEntity;
 import com.mate.album30.domain.member.entity.enums.Provider;
 import com.mate.album30.domain.albumTalk.entity.*;
@@ -48,12 +50,18 @@ public class Member extends BaseEntity {
     @Column
     private Boolean isActivated;
 
+    @Embedded
+    private Address address;
+
+    @Embedded
+    private Account account;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ShippingAddress> shippingAddressList = new ArrayList<>();
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<ShippingAddress> shippingAddressList = new ArrayList<>();
 }

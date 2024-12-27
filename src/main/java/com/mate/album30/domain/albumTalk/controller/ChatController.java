@@ -3,6 +3,9 @@ package com.mate.album30.domain.albumTalk.controller;
 import com.mate.album30.domain.albumTalk.dto.ChatDto;
 import com.mate.album30.domain.albumTalk.entity.Chat;
 import com.mate.album30.domain.albumTalk.service.ChatService;
+import com.mate.album30.domain.common.enums.QuickChat;
+import com.mate.album30.domain.member.entity.Member;
+import com.mate.album30.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +26,7 @@ public class ChatController {
 
     private static final Logger logger = LoggerFactory.getLogger(ChatController.class); // 로그 객체 생성
     private final ChatService chatService;
+    private final MemberRepository memberRepository;
 
     @MessageMapping("/{roomId}") // 여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes에서 적용한 건 앞에 생략
     @SendTo("/room/{roomId}")   // 구독하고 있는 장소로 메시지 전송 (목적지) -> WebSocketConfig Broker에서 적용한 건 앞에 붙어줘야됨
@@ -42,6 +46,7 @@ public class ChatController {
                 .type(chat.getType())
                 .build();
     }
+
 
 
     //    @PostMapping("/{chatRoom}")

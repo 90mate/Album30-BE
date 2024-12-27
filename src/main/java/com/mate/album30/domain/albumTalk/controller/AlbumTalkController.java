@@ -5,6 +5,7 @@ import com.mate.album30.domain.albumTalk.dto.ChatResponseDto;
 import com.mate.album30.domain.albumTalk.repository.ChatRepository;
 import com.mate.album30.domain.albumTalk.service.AlbumTalkService;
 import com.mate.album30.domain.albumTalk.service.ChatService;
+import com.mate.album30.domain.common.enums.QuickChat;
 import com.mate.album30.global.auth.annotation.LoginInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -56,5 +57,10 @@ public class AlbumTalkController {
     // Todo
     // quick message보내기(배송지 리스트 중 선택, 계좌, 사진/동영상)
 
+    @GetMapping("/quickChat")
+    public String requestQuickChat(@PathVariable(name = "icon") QuickChat quickChat, @RequestParam Long memberId) {
+        return chatService.requestQuickIcon(quickChat, memberId);
+
+    }
 
 }
