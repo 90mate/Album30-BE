@@ -35,10 +35,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
       throw GeneralException.of(ErrorStatus.INVALID_TOKEN_ERROR);
     }
 
-    boolean existsWithdrawnUser = memberRepository.existsWithdrawnMemberByMemberId((Long)authentication.getPrincipal());
-    if (existsWithdrawnUser) {
-      throw GeneralException.of(ErrorStatus.MEMBER_NOT_FOUND);
-    }
     return authentication.getPrincipal();
   }
 }
