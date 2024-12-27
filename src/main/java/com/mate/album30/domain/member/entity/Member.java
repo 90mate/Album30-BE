@@ -1,10 +1,8 @@
 package com.mate.album30.domain.member.entity;
 
 import com.mate.album30.domain.album.entity.Bookmark;
-import com.mate.album30.domain.albumTalk.entity.ChatRoom;
 import com.mate.album30.domain.common.BaseEntity;
 import com.mate.album30.domain.member.entity.enums.Provider;
-import com.mate.album30.domain.albumTalk.entity.*;
 import com.mate.album30.domain.orderMatch.entity.Order;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,14 +18,14 @@ import java.util.List;
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId; // MySQL에서 기본 키
+    private Long memberId;
 
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
+    @Column(unique = true)
     private String providerId;
 
-    @Column(unique = true)
     private String nickName;
 
     @Column
@@ -39,7 +37,7 @@ public class Member extends BaseEntity {
     @Column
     private String phoneNumber;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column
