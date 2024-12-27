@@ -14,10 +14,7 @@ public class ChatResponseDto {
     @Builder
     @Getter
     public static class ChatRoomResponseDto {
-        /**
-         *
-         *
-         * */
+
         Long chatRoomId;
         OrderStatus buyerStatus;
         OrderStatus sellerStatus;
@@ -47,8 +44,8 @@ public class ChatResponseDto {
 
 
 //                    .deliveryType(room.getOrderId().deleveryType)
-//                    .group(room.)
-//                    .artist()
+                    .group("NCT 마크(추후 데이터 받아옴)")
+                    .artist("마크(추후 데이터 받아옴)")
 //                    .image(room.getOrderId().image)
 
                     .build();

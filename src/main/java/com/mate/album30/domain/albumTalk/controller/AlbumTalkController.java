@@ -13,23 +13,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping
 @RequiredArgsConstructor
 public class AlbumTalkController {
     final AlbumTalkService albumTalkService;
     private final ChatService chatService;
 
-    @GetMapping("/{roomId}/history")
+    // 사용자의 채팅방 리스트 가져오기
+
+    @GetMapping("/token/test")
+    public void  getMemberIdFromToken(@LoginInfo Long memberId) {
+        System.out.println("Member ID: " + memberId);
+    }
+    @GetMapping("/chatRooms")
+    public List<ChatResponseDto.ChatRoomResponseDto>  getAllChatRoomsByMemberId(@RequestParam Long memberId) {
+        System.out.println("Member ID: " + memberId);
+
+        return albumTalkService.getAllChatRoomsByMemberId(memberId);
+    }
+    @GetMapping("/chat/{roomId}/history")
     public List<ChatDto> getChatHistory(@PathVariable Long roomId) {
         return chatService.getChatHistory(roomId);
     }
 
-    @GetMapping(value = "/{roomId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/chat/{roomId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ChatResponseDto.ChatRoomResponseDto getChatRoomInfo(@PathVariable Long roomId) {
         return albumTalkService.getChatRoomInfo(roomId);
     }
 
-    @PostMapping("/{chatRoom}")
+    @PostMapping("/chat/{chatRoom}")
     public void changeChatRoomStatus(@LoginInfo Long memberId,
                                      @PathVariable(name = "chatRoomId") Long chatRoomId,
                                      @RequestParam(name = "status") String orderStatus

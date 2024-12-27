@@ -27,7 +27,7 @@ public class ChatRoom extends BaseEntity {
 //    @Enumerated(EnumType.STRING)
 //    private Role role; // 구매자/판매자 역할 Enum
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Match match;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
