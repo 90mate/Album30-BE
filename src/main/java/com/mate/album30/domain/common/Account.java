@@ -12,4 +12,9 @@ public class Account implements Serializable {
     private String bank;
     private String accountNumber;
     private String accountHolder;
+
+    @Override
+    public String toString() {
+        return accountHolder + ", " + bank + ", " + accountNumber;
+    }
 }

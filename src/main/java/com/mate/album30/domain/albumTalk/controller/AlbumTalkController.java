@@ -57,7 +57,7 @@ public class AlbumTalkController {
     // Todo
     // quick message보내기(배송지 리스트 중 선택, 계좌, 사진/동영상)
 
-    @GetMapping("/quickChat")
+    @GetMapping("/quickChat/{icon}")
     public String requestQuickChat(@PathVariable(name = "icon") QuickChat quickChat, @RequestParam Long memberId) {
         return chatService.requestQuickIcon(quickChat, memberId);
 

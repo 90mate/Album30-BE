@@ -12,4 +12,9 @@ public class Address implements Serializable {
     private String city;
     private String street;
     private String zipcode;
+
+    @Override
+    public String toString() {
+        return city + ", " + street + ", " + zipcode;
+    }
 }

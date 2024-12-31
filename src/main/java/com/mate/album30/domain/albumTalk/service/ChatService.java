@@ -35,20 +35,20 @@ public class ChatService {
         // 메시지 유형에 따른 처리
         Chat chat;
         switch (receivedChatDto.getType()) {
-            case "message":
+            case "MESSAGE":
                 chat = createChat(roomId, receivedChatDto.getSenderId(), receivedChatDto.getMessage());
                 break;
-            case "photoVideo":
+            case "PHOTOVIEDEO":
                 chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "사진/동영상", receivedChatDto.getMessage());
                 break;
-            case "address":
+            case "ADDRESS":
                 chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "주소 정보", receivedChatDto.getType());
                 break;
-            case "account" :
+            case "ACCOUNT" :
                 // Todo 계좌 정보로 수정
                 chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "계좌정보", receivedChatDto.getType());
                 break;
-            case "report":
+            case "REPORT":
                 chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "신고 이력 관리", receivedChatDto.getType());
                 break;
 
