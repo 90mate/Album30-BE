@@ -39,17 +39,17 @@ public class ChatService {
                 chat = createChat(roomId, receivedChatDto.getSenderId(), receivedChatDto.getMessage());
                 break;
             case "PHOTOVIEDEO":
-                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "사진/동영상", receivedChatDto.getMessage());
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "사진/동영상 기능은 추후 개발됩니다.", receivedChatDto.getMessage());
                 break;
             case "ADDRESS":
-                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "주소 정보", receivedChatDto.getType());
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), member.getAddress() != null? member.getAddress().toString() : "주소 정보가 없습니다.", receivedChatDto.getType());
                 break;
             case "ACCOUNT" :
                 // Todo 계좌 정보로 수정
-                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "계좌정보", receivedChatDto.getType());
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), member.getAccount() != null ? member.getAccount().toString() : "계좌 정보가 없습니다.", receivedChatDto.getType());
                 break;
             case "REPORT":
-                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "신고 이력 관리", receivedChatDto.getType());
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "신고기능은 추후 개발됩니다.", receivedChatDto.getType());
                 break;
 
             default:
