@@ -39,7 +39,7 @@ public class ChatService {
                 chat = createChat(roomId, receivedChatDto.getSenderId(), receivedChatDto.getMessage());
                 break;
             case "PHOTOVIEDEO":
-                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "사진/동영상 기능은 추후 개발됩니다.", receivedChatDto.getMessage());
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "사진/동영상 기능은 추후 개발됩니다.", receivedChatDto.getType());
                 break;
             case "ADDRESS":
                 chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), member.getAddress() != null? member.getAddress().toString() : "주소 정보가 없습니다.", receivedChatDto.getType());
