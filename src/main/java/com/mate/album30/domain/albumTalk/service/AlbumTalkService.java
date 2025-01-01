@@ -25,6 +25,17 @@ public class AlbumTalkService {
     private final ChatRoomRepository chatRoomRepository;  // ChatRoom 데이터를 처리할 Repository
 
 
+    public List<ChatResponseDto.ChatRoomResponseDto> getAllChatRoomsByMemberId(Long memberId) {
+
+        List<ChatResponseDto.ChatRoomResponseDto> rooms = chatRoomRepository.findChatRoomsByMemberId(memberId)
+                .stream().map(ChatResponseDto.ChatRoomResponseDto::convertToChatRoomDto)
+                .collect(Collectors.toList());
+
+        return rooms;
+
+
+
+    }
     public ChatResponseDto.ChatRoomResponseDto getChatRoomInfo(Long roomId) {
         ChatRoom room = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("ChatRoom not found"));

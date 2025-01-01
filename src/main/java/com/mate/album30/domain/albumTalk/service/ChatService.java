@@ -5,6 +5,8 @@ import com.mate.album30.domain.albumTalk.entity.Chat;
 import com.mate.album30.domain.albumTalk.entity.ChatRoom;
 import com.mate.album30.domain.albumTalk.repository.ChatRepository;
 import com.mate.album30.domain.albumTalk.repository.ChatRoomRepository;
+import com.mate.album30.domain.common.Account;
+import com.mate.album30.domain.common.enums.QuickChat;
 import com.mate.album30.domain.member.entity.Member;
 import com.mate.album30.domain.member.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
@@ -33,18 +35,21 @@ public class ChatService {
         // 메시지 유형에 따른 처리
         Chat chat;
         switch (receivedChatDto.getType()) {
-            case "message":
+            case "MESSAGE":
                 chat = createChat(roomId, receivedChatDto.getSenderId(), receivedChatDto.getMessage());
                 break;
-            case "address":
-                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "주소 정보", receivedChatDto.getType());
+            case "PHOTOVIEDEO":
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "사진/동영상 기능은 추후 개발됩니다.", receivedChatDto.getType());
                 break;
-            case "accont" :
+            case "ADDRESS":
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), member.getAddress() != null? member.getAddress().toString() : "주소 정보가 없습니다.", receivedChatDto.getType());
+                break;
+            case "ACCOUNT" :
                 // Todo 계좌 정보로 수정
-                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "계좌정보", receivedChatDto.getType());
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), member.getAccount() != null ? member.getAccount().toString() : "계좌 정보가 없습니다.", receivedChatDto.getType());
                 break;
-            case "delivery":
-                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), receivedChatDto.getMessage(), receivedChatDto.getType());
+            case "REPORT":
+                chat = createQuicklChat(roomId, receivedChatDto.getSenderId(), "신고기능은 추후 개발됩니다.", receivedChatDto.getType());
                 break;
 
             default:
@@ -93,6 +98,24 @@ public class ChatService {
         );
 
     }
+
+    @Transactional
+    public String requestQuickIcon(QuickChat quickChat, Long memberId) {
+        Member member = memberRepository.findMemberByMemberId(memberId);
+        switch (quickChat) {
+            case PHOTOVIEDEO:
+                return "사진/동영상 기능은 추후 개발됩니다.";
+            case ADDRESS:
+                return (member.getAddress() != null) ? member.getAddress().toString() : "주소 정보가 없습니다.";
+            case ACCOUNT:
+                return (member.getAccount() != null) ? member.getAccount().toString() : "계좌 정보가 없습니다.";
+            case REPORT:
+                return "신고기능은 추후 개발됩니다.";
+            default:
+                throw new IllegalArgumentException("Unsupported chat type: " + quickChat);
+        }
+    }
+
 
 
     public List<ChatDto> getChatHistory(Long roomId) {

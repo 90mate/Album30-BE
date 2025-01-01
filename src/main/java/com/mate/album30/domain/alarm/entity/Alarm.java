@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "albums")
+@Table(name = "alarms")
 public class Alarm extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
