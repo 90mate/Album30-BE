@@ -42,7 +42,7 @@ public class AlbumTalkController {
         return albumTalkService.getChatRoomInfo(roomId);
     }
 
-    @PostMapping("/chat/{chatRoom}")
+    @PostMapping("/chat/status/{chatRoomId}")
     public void changeChatRoomStatus(@LoginInfo Long memberId,
                                      @PathVariable(name = "chatRoomId") Long chatRoomId,
                                      @RequestParam(name = "status") String orderStatus

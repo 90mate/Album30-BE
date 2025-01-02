@@ -22,6 +22,7 @@ public class ChatResponseDto {
         String recentChat;
         String buyer;
         String seller;
+        String status;
 
 
         /**
@@ -33,6 +34,7 @@ public class ChatResponseDto {
         String image;
 
         public static ChatRoomResponseDto convertToChatRoomDto(ChatRoom room) {
+            String groupName = room.getMatch().getSeller().getAlbum().getGroup().getGroupName();
             return ChatRoomResponseDto.builder()
                     .chatRoomId(room.getChatRoomId())
 //                    .buyerStatus(room.getBuyerStatus())
@@ -44,9 +46,10 @@ public class ChatResponseDto {
 
 
 //                    .deliveryType(room.getOrderId().deleveryType)
-                    .group("NCT 마크(추후 데이터 받아옴)")
-                    .artist("마크(추후 데이터 받아옴)")
+                    .group(groupName != null ? groupName : "NCT 마크(추후 데이터 받아옴)")
+                    .artist("/마크(추후 데이터 받아옴)")
 //                    .image(room.getOrderId().image)
+                    .status(room.isCompleted() ? "거래 완료" : "거래중")
 
                     .build();
         }
