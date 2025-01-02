@@ -43,4 +43,6 @@ public class Album extends BaseEntity {
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
 
+
+
 }

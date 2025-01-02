@@ -30,4 +30,5 @@ public class Group extends BaseEntity {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupArtistMapping> groupArtistMappings;
+
 }
