@@ -1,9 +1,9 @@
 package com.mate.album30.domain.alarm.repository;
 
-import com.mate.album30.domain.alarm.entity.Alarm;
+import com.mate.album30.domain.alarm.entity.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AlarmRepository extends JpaRepository<Alarm, Long> {
+public interface AlarmRepository extends JpaRepository<Notification, Long> {
 }

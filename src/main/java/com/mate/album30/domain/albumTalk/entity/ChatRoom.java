@@ -1,5 +1,6 @@
 package com.mate.album30.domain.albumTalk.entity;
 
+import com.mate.album30.domain.alarm.entity.Notification;
 import com.mate.album30.domain.common.BaseEntity;
 import com.mate.album30.domain.common.Role;
 import com.mate.album30.domain.common.enums.OrderStatus;
@@ -32,6 +33,9 @@ public class ChatRoom extends BaseEntity {
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<Chat> chats = new ArrayList<>(); // 메시지 리스트
+
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    private List<Notification> notificationList = new ArrayList<>();
 
     private boolean isCompleted;
 
