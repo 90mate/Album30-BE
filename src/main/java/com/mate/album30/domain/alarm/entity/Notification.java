@@ -28,19 +28,21 @@ public class Notification extends BaseEntity {
 
     private boolean isRead;
 
+    //Todo nullable false로 추후 수정
     @ManyToOne
-    @Column(name = "alertType")
-    private AlertType alertType;
+    @JoinColumn(name = "alertType_id", nullable = true)
+    private AlertType alertType; // 알림 유형
+
 //    @ManyToOne
 //    @JoinColumn(name = "order_id", nullable = true)
-//    private Order order; // 선택적 참조
+//    private Order order; // 선택적 참조, 주문 관련 알림
 //
 //    @ManyToOne
 //    @JoinColumn(name = "album_id", nullable = true)
-//    private Album album; // 선택적 참조
+//    private Album album; // 선택적 참조, 앨범 관련 알림
 
     @ManyToOne
     @JoinColumn(name = "chatRoom_id", nullable = true)
-    private ChatRoom chatRoom; // 선택적 참조
+    private ChatRoom chatRoom; // 선택적 참조, 채팅방 관련 알림
 
 }

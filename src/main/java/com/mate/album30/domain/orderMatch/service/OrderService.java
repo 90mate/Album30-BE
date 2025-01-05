@@ -1,5 +1,6 @@
 package com.mate.album30.domain.orderMatch.service;
 
+import com.mate.album30.domain.alarm.service.SseEmitters;
 import com.mate.album30.domain.album.entity.Album;
 import com.mate.album30.domain.album.repository.AlbumRepository;
 import com.mate.album30.domain.albumTalk.service.AlbumTalkService;
@@ -29,6 +30,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final MatchingRepository matchingRepository; // 매칭된 거래 저장소
     private final AlbumTalkService albumTalkService;
+    private final SseEmitters sseEmitters;
 
     // Order 생성
     @Transactional

@@ -134,5 +134,21 @@ public class ChatService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    public Long findRecieverIdFromChatDTO(ChatDto chatDto) {
+        // roomId
+        ChatRoom chatRoom = chatRoomRepository.findById(chatDto.getChatRoomId()).orElseThrow();
+
+        // senderId
+        Long senderId = chatDto.getSenderId();
+
+        //recieverId
+        Long sellerId = chatRoom.getMatch().getSeller().getMember().getMemberId();
+        Long buyerId = chatRoom.getMatch().getSeller().getMember().getMemberId();
+        // if sender==seller -> return buyer / sender==buyer -> return seller
+        return senderId == sellerId ? buyerId : sellerId;
+
+
+    }
 }
 

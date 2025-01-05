@@ -1,5 +1,7 @@
 package com.mate.album30.domain.albumTalk.controller;
 
+import com.mate.album30.domain.alarm.entity.Notification;
+import com.mate.album30.domain.alarm.service.SseEmitters;
 import com.mate.album30.domain.albumTalk.dto.ChatDto;
 import com.mate.album30.domain.albumTalk.entity.Chat;
 import com.mate.album30.domain.albumTalk.service.ChatService;
@@ -27,6 +29,7 @@ public class ChatController {
     private static final Logger logger = LoggerFactory.getLogger(ChatController.class); // 로그 객체 생성
     private final ChatService chatService;
     private final MemberRepository memberRepository;
+    private final SseEmitters sseEmitters;
 
     @MessageMapping("/{roomId}") // 여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes에서 적용한 건 앞에 생략
     @SendTo("/room/{roomId}")   // 구독하고 있는 장소로 메시지 전송 (목적지) -> WebSocketConfig Broker에서 적용한 건 앞에 붙어줘야됨
@@ -36,6 +39,13 @@ public class ChatController {
 
         // 메시지 유형에 따른 처리
         Chat chat = chatService.decideNormalChatOrQuickChat(roomId, receivedChatDto);
+        // 채팅 알림 생성
+        // 알림 생성
+        Notification notification = Notification.builder().title("새로운 채팅").build();
+
+// 알림 전송
+        sseEmitters.sendNotification(chatService.findRecieverIdFromChatDTO(receivedChatDto), "newChat", notification);
+
 
         logger.info("Chat saved: {}", chat);
 
